@@ -26,6 +26,9 @@ def call_foo(inst):
         return False
 ```
 
+
+
+
 **Ответ:** Вернет False
 
 Задача #2
@@ -43,14 +46,25 @@ AttributeError не возникал.
 вариант исправления:
 
 ```
+def add_bar_decorator(func):
+    def wrapper(inst):
+        if not hasattr(inst, "bar"):
+            setattr(inst, "bar", lambda: None)
+        func(inst)
+
+    return wrapper
+
+
 class A(object):
     def __init__(self, value):
         self._value = value
 
     def foo(self):
-        # тут убрал строчку
+        self.bar()
         return self._value
 
+
+@add_bar_decorator
 def call_foo(inst):
     try:
         assert isinstance(inst, A)
